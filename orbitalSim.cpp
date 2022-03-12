@@ -93,15 +93,15 @@ void updateOrbitalSim(OrbitalSim *sim)
   for (int i = 0; i < sim->cantcuerpos; i++)
   {
     sim->cuerpos[i].aceleracion = Vector3Zero();
-    for (int j = 0; j < sim->cantcuerpos; j++)
-    {
-      if (i == j)
-        continue;
-      Vector3 aux1 = Vector3Subtract(sim->cuerpos[i].position, sim->cuerpos[j].position);
-      float aux2 = Vector3Length(aux1);
-      aux2 = aux2 * aux2 * aux2;
-      aux1 = Vector3Scale(aux1, GRAVITATIONAL_CONSTANT * sim->cuerpos[j].mass / aux2);
-      sim->cuerpos[i].aceleracion = Vector3Subtract(sim->cuerpos[i].aceleracion, aux1);
+    for (int j = i+1; j < sim->cantcuerpos; j++)
+    {      
+      Vector3 dif = Vector3Subtract(sim->cuerpos[i].position, sim->cuerpos[j].position);
+      float longitud = Vector3Length(dif);
+      longitud = longitud * longitud * longitud;
+      Vector3 aux = Vector3Scale(dif, -GRAVITATIONAL_CONSTANT/longitud);
+      sim->cuerpos[i].aceleracion = Vector3Add(sim->cuerpos[i].aceleracion, Vector3Scale(aux, sim->cuerpos[j].mass));
+      sim->cuerpos[j].aceleracion = Vector3Add(sim->cuerpos[i].aceleracion, Vector3Scale(aux, sim->cuerpos[i].mass));
+      
     }
     Vector3 aux3 = Vector3Scale(sim->cuerpos[i].aceleracion, sim->timestep);
     sim->cuerpos[i].velocity = Vector3Add(sim->cuerpos[i].velocity, aux3);
