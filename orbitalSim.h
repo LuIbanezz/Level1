@@ -13,22 +13,21 @@
 
 struct OrbitalBody
 {
-    //const char* name; // Name
-    float mass;		  // [kg]
-    float radius;	  // [m]
-    Color color;	  // raylib color
-    Vector3 position; // [m]
-    Vector3 velocity; // [m/s]
-    Vector3 aceleracion;
+  // const char* name; // Name
+  float mass;       // [kg]
+  float radius;     // [m]
+  Color color;      // raylib color
+  Vector3 position; // [m]
+  Vector3 velocity; // [m/s]
+  Vector3 aceleracion;
 };
-
 
 struct OrbitalSim
 {
-    float timestep;
-    float tiempotranscurrido;
-    int cantcuerpos;
-    OrbitalBody* cuerpos;
+  float timestep;
+  float tiempotranscurrido;
+  int cantcuerpos;
+  OrbitalBody *cuerpos;
 };
 
 OrbitalSim *makeOrbitalSim(float timeStep);
