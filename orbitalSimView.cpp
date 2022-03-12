@@ -29,11 +29,13 @@ void renderOrbitalSim3D(OrbitalSim *sim)
   {
     DrawSphere(Vector3Scale(sim->cuerpos[i].position, 1.0e-11f), 0.005f*logf(sim->cuerpos[i].radius), sim->cuerpos[i].color);
     DrawPoint3D(sim->cuerpos[i].position, sim->cuerpos[i].color);
+    DrawLine3D(Vector3Scale(sim->cuerpos[i].position, 1.0e-11f), Vector3Add(Vector3Scale(sim->cuerpos[i].position, 1.0e-11f), Vector3Scale(sim->cuerpos[i].aceleracion, 1.0e-2f)), GetColor(0xFFFFFF));
+    DrawLine3D(Vector3Scale(sim->cuerpos[i].position, 1.0e-11f), Vector3Add(Vector3Scale(sim->cuerpos[i].position, 1.0e-11f), Vector3Scale(sim->cuerpos[i].velocity, 1.0e-4f)), GetColor(0x0FFFFF));
   }
 }
 
 void renderOrbitalSim2D(OrbitalSim *sim)
 {
   DrawFPS(0,0);
-  DrawText("Texto de prueba",0,10,10,GetColor(0xFFFFF));
+  DrawText("Texto de prueba",0,25,25,GetColor(0xFFFFF));
 }

@@ -16,7 +16,6 @@ struct EphemeridesBody
   Color color;      // raylib color
   Vector3 position; // [m]
   Vector3 velocity; // [m/s]
-  Vector3 aceleracion;
 };
 
 // Solar system ephemerides for 2022-01-01T00:00:00Z

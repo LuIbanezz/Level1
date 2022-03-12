@@ -13,10 +13,11 @@
 #include "ephemerides.h"
 #include "raymath.h"
 #include <stdlib.h>
+#include <string.h>
 
 #define GRAVITATIONAL_CONSTANT 6.6743E-11F
 #define ASTEROIDS_MEAN_RADIUS 4E11F
-#define CANT_CUERPOS 10
+#define CANT_CUERPOS 9
 
 // Gets a random value between min and max
 float getRandomFloat(float min, float max)
@@ -79,11 +80,11 @@ void updateOrbitalSim(OrbitalSim *sim)
 {
   for (int i = 0; i < sim->cantcuerpos; i++)
   {
+    sim->cuerpos[i].aceleracion = Vector3Zero();
     for (int j = 0; j < sim->cantcuerpos; j++)
     {
       if (i == j)
         continue;
-
       Vector3 aux1 = Vector3Subtract(sim->cuerpos[i].position, sim->cuerpos[j].position);
       float aux2 = Vector3Length(aux1);
       aux2 = aux2 * aux2 * aux2;

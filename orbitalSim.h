@@ -20,6 +20,7 @@ struct OrbitalBody
   Vector3 position; // [m]
   Vector3 velocity; // [m/s]
   Vector3 aceleracion;
+  char *name;
 };
 
 struct OrbitalSim
