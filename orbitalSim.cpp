@@ -17,7 +17,7 @@
 
 #define GRAVITATIONAL_CONSTANT 6.6743E-11F
 #define ASTEROIDS_MEAN_RADIUS 4E11F
-#define CANT_CUERPOS 9
+#define CANT_CUERPOS 509
 
 // Gets a random value between min and max
 float getRandomFloat(float min, float max)
@@ -28,7 +28,7 @@ float getRandomFloat(float min, float max)
 // Places an asteroid
 //
 // centerMass: mass of the most massive object in the star system
-void placeAsteroid(OrbitalBody *body, float centerMass)
+OrbitalBody placeAsteroid(float centerMass)
 {
   // Logit distribution
   float x = getRandomFloat(0, 1);
@@ -45,19 +45,25 @@ void placeAsteroid(OrbitalBody *body, float centerMass)
   float v = sqrtf(GRAVITATIONAL_CONSTANT * centerMass / r) * getRandomFloat(0.6F, 1.2F);
   float vy = getRandomFloat(-1E2F, 1E2F);
 
+  
+
   // Fill in with your own fields:
-  // body->mass = 1E12F;  // Typical asteroid weight: 1 billion tons
-  // body->radius = 2E3F; // Typical asteroid radius: 2km
-  // body->color = GRAY;
-  // body->position = {r * cosf(phi), 0, r * sinf(phi)};
-  // body->velocity = {-v * sinf(phi), vy, v * cosf(phi)};
+  OrbitalBody body;
+  body.mass = 1E12F;  // Typical asteroid weight: 1 billion tons
+  body.radius = 2E3F; // Typical asteroid radius: 2km
+  body.color = GRAY;
+  body.position = {r * cosf(phi), 0, r * sinf(phi)};
+  body.velocity = {-v * sinf(phi), vy, v * cosf(phi)};
+  body.aceleracion = Vector3Zero();
+
+  return body;
 }
 
 // Make an orbital simulation
 OrbitalSim *makeOrbitalSim(float timeStep)
 {
   OrbitalBody *cuerpo = (OrbitalBody *)malloc(CANT_CUERPOS * sizeof(OrbitalBody));
-  for (int i = 0; i < CANT_CUERPOS; i++)
+  for (int i = 0; i < 9; i++)
   {
     cuerpo[i].mass = solarSystem[i].mass;
     cuerpo[i].radius = solarSystem[i].radius;
@@ -66,6 +72,12 @@ OrbitalSim *makeOrbitalSim(float timeStep)
     cuerpo[i].velocity = solarSystem[i].velocity;
     cuerpo[i].aceleracion = Vector3{0, 0, 0};
   }
+
+  for (int i=9; i<CANT_CUERPOS; i++)
+  {
+    cuerpo[i] = placeAsteroid(cuerpo[0].mass);
+  }
+
   OrbitalSim *simulacion = (OrbitalSim *)malloc(sizeof(OrbitalSim));
   simulacion->cantcuerpos = CANT_CUERPOS;
   simulacion->timestep = timeStep;
@@ -97,6 +109,7 @@ void updateOrbitalSim(OrbitalSim *sim)
     Vector3 aux4 = Vector3Scale(sim->cuerpos[i].velocity, sim->timestep);
     sim->cuerpos[i].position = Vector3Add(sim->cuerpos[i].position, aux4);
   }
+  sim->tiempotranscurrido += sim->timestep;
 }
 
 void freeOrbitalSim(OrbitalSim *sim)

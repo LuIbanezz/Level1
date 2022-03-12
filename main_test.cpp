@@ -6,6 +6,9 @@
  * Copyright (C) 2022 Marc S. Ressl
  *
  * Tests
+ * 
+ * El uso de float está justificado pues la precisión para representar las magnitudes es óptima
+ * Los errores cometidos en los cálculos no son significativos
  */
 
 #include <iostream>
