@@ -37,5 +37,5 @@ void renderOrbitalSim3D(OrbitalSim *sim)
 void renderOrbitalSim2D(OrbitalSim *sim)
 {
   DrawFPS(0,0);
-  DrawText("Texto de prueba",0,25,25,GetColor(0xFFFFF));
+  DrawText(getISODate(sim->tiempotranscurrido),0,25,25,GetColor(0xFFFFF));
 }

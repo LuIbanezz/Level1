@@ -95,6 +95,7 @@ void updateOrbitalSim(OrbitalSim *sim)
     sim->cuerpos[i].position = Vector3Add(sim->cuerpos[i].position, Vector3Scale(sim->cuerpos[i].velocity, sim->timestep));
     sim->cuerpos[i].aceleracion = Vector3Zero();
   }
+  sim->tiempotranscurrido += sim->timestep;
 }
 
 void freeOrbitalSim(OrbitalSim *sim)
