@@ -87,27 +87,28 @@ OrbitalSim *makeOrbitalSim(float timeStep)
   return simulacion;
 }
 
-// Simulates a timestep
 void updateOrbitalSim(OrbitalSim *sim)
 {
   for (int i = 0; i < sim->cantcuerpos; i++)
   {
-    sim->cuerpos[i].aceleracion = Vector3Zero();
     for (int j = i+1; j < sim->cantcuerpos; j++)
-    {      
-      Vector3 dif = Vector3Subtract(sim->cuerpos[i].position, sim->cuerpos[j].position);
-      float longitud = Vector3Length(dif);
+    {
+      Vector3 diff = Vector3Subtract(sim->cuerpos[i].position, sim->cuerpos[j].position);
+      float longitud = Vector3Length(diff);
       longitud = longitud * longitud * longitud;
-      Vector3 aux = Vector3Scale(dif, -GRAVITATIONAL_CONSTANT/longitud);
-      sim->cuerpos[i].aceleracion = Vector3Add(sim->cuerpos[i].aceleracion, Vector3Scale(aux, sim->cuerpos[j].mass));
-      sim->cuerpos[j].aceleracion = Vector3Add(sim->cuerpos[i].aceleracion, Vector3Scale(aux, sim->cuerpos[i].mass));
-      
+      diff = Vector3Scale(diff, GRAVITATIONAL_CONSTANT);
+      if(i >= 9 && j >= 9)
+      {
+        Vector3 termino = Vector3Scale(diff, sim->cuerpos[j].mass/longitud);
+        sim->cuerpos[i].aceleracion = Vector3Subtract(sim->cuerpos[i].aceleracion, termino);
+        sim->cuerpos[j].aceleracion = Vector3Add(sim->cuerpos[j].aceleracion, termino);
+      }
+      sim->cuerpos[i].aceleracion = Vector3Subtract(sim->cuerpos[i].aceleracion, Vector3Scale(diff, sim->cuerpos[j].mass/longitud));
+      sim->cuerpos[j].aceleracion = Vector3Add(sim->cuerpos[j].aceleracion, Vector3Scale(diff, sim->cuerpos[i].mass/longitud));
     }
-    Vector3 aux3 = Vector3Scale(sim->cuerpos[i].aceleracion, sim->timestep);
-    sim->cuerpos[i].velocity = Vector3Add(sim->cuerpos[i].velocity, aux3);
-
-    Vector3 aux4 = Vector3Scale(sim->cuerpos[i].velocity, sim->timestep);
-    sim->cuerpos[i].position = Vector3Add(sim->cuerpos[i].position, aux4);
+    sim->cuerpos[i].velocity = Vector3Add(sim->cuerpos[i].velocity, Vector3Scale(sim->cuerpos[i].aceleracion, sim->timestep));
+    sim->cuerpos[i].position = Vector3Add(sim->cuerpos[i].position, Vector3Scale(sim->cuerpos[i].velocity, sim->timestep));
+    sim->cuerpos[i].aceleracion = Vector3Zero();
   }
   sim->tiempotranscurrido += sim->timestep;
 }
