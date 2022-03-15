@@ -1,24 +1,33 @@
-
-/*
- * Orbital simulation
+/**
+ * @file 	main_test.cpp
+ * @authors	Tomás Castro, Lucía Ibañez
  *
- * 22.08 EDA
- * Copyright (C) 2022 Marc S. Ressl
- *
- * Tests
+ * @brief 	Archivo principal #2
  * 
- * El uso de float está justificado pues la precisión para representar las magnitudes es óptima
- * Los errores cometidos en los cálculos no son significativos
+ * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
+ *
  */
 
-#include <iostream>
+/*******************************************************************************
+ * INCLUDE HEADER FILES
+ ******************************************************************************/
 
+#include <iostream>
 #include "orbitalSim.h"
+
+/*******************************************************************************
+ * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
+ ******************************************************************************/
 
 #define SECONDS_PER_DAY 86400.0F
 
-using namespace std;
+/*******************************************************************************
+ *******************************************************************************
+                                    MAIN
+ *******************************************************************************
+ ******************************************************************************/
 
+using namespace std;
 int main()
 {
   float fps = 60.0F;                            // frames per second
@@ -27,21 +36,7 @@ int main()
 
   OrbitalSim *sim = makeOrbitalSim(timeStep);
 
-  // Modify to suit your code:
-  // if (sim->body[0].position.x != -1.283674643550172E+09F)
-  // {
-  //     cout << "OrbitSim not initialized correctly" << endl;
-  //     return 1;
-  // }
-
   updateOrbitalSim(sim);
-
-  // Modify to suit your code:
-  // if (sim->body[0].position.x != -1.284506496E+09F)
-  // {
-  //     cout << "OrbitSim not updated correctly" << endl;
-  //     return 2;
-  // }
 
   return 0;
 }

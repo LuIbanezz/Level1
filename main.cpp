@@ -1,17 +1,46 @@
-﻿/*
- * Orbital simulation
+﻿/**
+ * @file 	main.cpp
+ * @authors	Tomás Castro, Lucía Ibañez
  *
- * 22.08 EDA
- * Copyright (C) 2022 Marc S. Ressl
+ * @brief 	Archivo principal para la simulación del Sistema Solar
+ * 
+ * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
  *
- * Main module
  */
+
+
+/*
+ * El uso de float está justificado pues la precisión para representar las magnitudes es óptima
+ * Los errores cometidos en los cálculos no son significativos
+ */
+
+/*
+ * La complejidad es O(n^2)...
+ * 
+ * 
+ */
+
+/*******************************************************************************
+ * INCLUDE HEADER FILES
+ ******************************************************************************/
 
 #include "orbitalSim.h"
 #include "orbitalSimView.h"
+#include <iostream>
+
+/*******************************************************************************
+ * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
+ ******************************************************************************/
 
 #define SECONDS_PER_DAY 86400.0F
 
+/*******************************************************************************
+ *******************************************************************************
+                                    MAIN
+ *******************************************************************************
+ ******************************************************************************/
+
+using namespace std;
 int main()
 {
   const int screenWidth = 800;
@@ -19,7 +48,6 @@ int main()
 
   InitWindow(screenWidth, screenHeight, "EDA Orbital Simulation");
 
-  // Camera
   Camera3D camera;
   camera.position = {10.0f, 10.0f, 10.0f};
   camera.target = {0.0f, 0.0f, 0.0f};
@@ -30,9 +58,8 @@ int main()
 
   SetCameraPanControl(MOUSE_BUTTON_LEFT);
 
-  // Orbital simulation
-  float fps = 60.0F;                            // frames per second
-  float timeMultiplier = 10*SECONDS_PER_DAY; // Simulation speed
+  float fps = 60.0F;
+  float timeMultiplier = 10*SECONDS_PER_DAY;
   float timeStep = timeMultiplier / fps;
 
   OrbitalSim *sim = makeOrbitalSim(timeStep);
@@ -40,13 +67,11 @@ int main()
   // Game loop
   while (!WindowShouldClose())
   {
-    // Update simulation
     updateOrbitalSim(sim);
+    cout << GetTime() << endl;
 
-    // Camera
     UpdateCamera(&camera);
 
-    // Render
     BeginDrawing();
     ClearBackground(BLACK);
 
@@ -57,6 +82,7 @@ int main()
 
     renderOrbitalSim2D(sim);
     EndDrawing();
+    cout << GetTime() << endl << endl;
   }
 
   CloseWindow();

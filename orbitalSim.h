@@ -1,25 +1,36 @@
-﻿/*
- * Orbital simulation
+﻿/**
+ * @file 	OrbitalSim.h
+ * @authors	Tomás Castro, Lucía Ibañez
  *
- * 22.08 EDA
- * Copyright (C) 2022 Marc S. Ressl
+ * @brief 	Definiciones relacionadas a datos de la simulación y los cuerpos
+ * 
+ * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
+ *
  */
 
 #ifndef ORBITALSIM_H
 #define ORBITALSIM_H
 
+/*******************************************************************************
+ * INCLUDE HEADER FILES
+ ******************************************************************************/
+
 #include "raylib.h"
 #include "raymath.h"
+
+/*******************************************************************************
+ * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
+ ******************************************************************************/
 
 struct OrbitalBody
 {
   // const char* name; // Name
-  float mass;       // [kg]
-  float radius;     // [m]
+  float masa;       // [kg]
+  float radio;     // [m]
   Color color;      // raylib color
-  Vector3 position; // [m]
-  Vector3 velocity; // [m/s]
-  Vector3 aceleracion;
+  Vector3 posicion; // [m]
+  Vector3 cte_velocidad; // velocidad inicial * timestep
+  Vector3 acumulador_aceleracion;
 };
 
 struct OrbitalSim
@@ -30,8 +41,29 @@ struct OrbitalSim
   OrbitalBody *cuerpos;
 };
 
+/*******************************************************************************
+ * FUNCTION PROTOTYPES WITH GLOBAL SCOPE
+ ******************************************************************************/
+
+/**
+ * @brief Inicializa la simulación
+ *
+ * @param timeStep
+ */
 OrbitalSim *makeOrbitalSim(float timeStep);
+
+/**
+ * @brief Actualiza la simulación
+ *
+ * @param sim
+ */
 void updateOrbitalSim(OrbitalSim *sim);
+
+/**
+ * @brief Actualiza la simulación
+ *
+ * @param sim
+ */
 void freeOrbitalSim(OrbitalSim *sim);
 
 #endif

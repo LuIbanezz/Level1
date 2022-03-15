@@ -1,12 +1,19 @@
-/*
- * Ephemerides for orbital simulation
+/**
+ * @file 	ephemerides.h
+ * @authors	Tomás Castro, Lucía Ibañez
  *
- * 22.08 EDA
- * Copyright (C) 2022 by Marc S. Ressl
+ * @brief 	Archivo de efemérides
+ * 
+ * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
+ *
  */
 
 #ifndef EPHEMERIDES_H
 #define EPHEMERIDES_H
+
+/*******************************************************************************
+ * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
+ ******************************************************************************/
 
 struct EphemeridesBody
 {
@@ -117,6 +124,9 @@ EphemeridesBody alphaCentauriSystem[] = {
     },
 };
 
+/*******************************************************************************
+ * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
+ ******************************************************************************/
 #define ALPHACENTAURISYSTEM_BODYNUM (sizeof(alphaCentauriSystem) / sizeof(EphemeridesBody))
 
 #endif
