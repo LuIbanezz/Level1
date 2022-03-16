@@ -2,21 +2,25 @@
  * @file 	OrbitalSim.cpp
  * @authors	Tomás Castro, Lucía Ibañez
  *
- * @brief 	Definiciones relacionadas a datos de la simulación y los cuerpos
+ * @brief 	Clase para controlar la simulación (cuerpo)
  * 
  * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
  *
  */
 
+#ifndef ORBITAL_SIM_CPP
+#define ORBITAL_SIM_CPP
+
 /*******************************************************************************
  * INCLUDE HEADER FILES
  ******************************************************************************/
 
-#include "orbitalSim.h"
+#include "OrbitalSim.h"
 #include "ephemerides.h"
 #include "raymath.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <time.h>
 #include <stdlib.h>
 
 /*******************************************************************************
@@ -24,8 +28,9 @@
  ******************************************************************************/
 
 #define GRAVITATIONAL_CONSTANT 6.6743E-11F
-#define ASTEROIDS_MEAN_radio 4E11F
 #define CANT_CUERPOS 509
+#define CANT_PLANETAS 9
+#define CANT_ASTERIODES 500
 
 /*******************************************************************************
  *******************************************************************************
@@ -33,93 +38,85 @@
  *******************************************************************************
  ******************************************************************************/
 
-float getRandomFloat(float min, float max)
+OrbitalSim::OrbitalSim(float timeStep)
 {
-  return min + (max - min) * rand() / (float)RAND_MAX;
-}
-
-OrbitalBody placeAsteroid(float centermass, float timeStep)
-{
-  // Logit distribution
-  float x = getRandomFloat(0, 1);
-  float l = logf(x) - logf(1 - x) + 1;
-
-  // https://mathworld.wolfram.com/DiskPointPicking.html
-  float r = ASTEROIDS_MEAN_radio * sqrtf(fabs(l));
-  float phi = getRandomFloat(0, 2 * M_PI);
-
-  // Surprise!
-  // phi = 0;
-
-  // https://en.wikipedia.org/wiki/Circular_orbit#Velocity
-  float v = sqrtf(GRAVITATIONAL_CONSTANT * centermass / r) * getRandomFloat(0.6F, 1.2F);
-  float vy = getRandomFloat(-1E2F, 1E2F);
-
-    OrbitalBody body;
-  body.masa = 1E12F;  // Typical asteroid weight: 1 billion tons
-  body.radio = 2E3F; // Typical asteroid radio: 2km
-  body.color = GRAY;
-  body.posicion = {r * cosf(phi), 0, r * sinf(phi)};
-  body.cte_velocidad = Vector3Scale({-v * sinf(phi), vy, v * cosf(phi)}, timeStep);
-  body.acumulador_aceleracion = Vector3Zero();
-
-  return body;
-}
-
-OrbitalSim *makeOrbitalSim(float timeStep)
-{
-  OrbitalBody *cuerpo = (OrbitalBody *)malloc(CANT_CUERPOS * sizeof(OrbitalBody));
-  for (int i = 0; i < 9; i++)
+  OrbitalBody *cuerpo = new OrbitalBody[CANT_CUERPOS];
+  for (int i = 0; i < CANT_PLANETAS ; i++)
   {
-    cuerpo[i].masa = solarSystem[i].mass;
-    cuerpo[i].radio = solarSystem[i].radius;
-    cuerpo[i].color = solarSystem[i].color;
-    cuerpo[i].posicion = solarSystem[i].position;
-    cuerpo[i].cte_velocidad = Vector3Scale(solarSystem[i].velocity, timeStep);
-    cuerpo[i].acumulador_aceleracion = Vector3Zero();
+    cuerpo[i] = OrbitalBody(solarSystem[i].mass, solarSystem[i].radius, solarSystem[i].color, solarSystem[i].position, solarSystem[i].velocity, timeStep);
   }
-
-  for (int i=9; i<CANT_CUERPOS; i++)
+  float masa_sol = solarSystem[0].mass;
+  for(int i = CANT_PLANETAS; i < CANT_CUERPOS ; i++)
   {
-    cuerpo[i] = placeAsteroid(cuerpo[0].masa, timeStep);
+    cuerpo[i] = OrbitalBody(masa_sol, timeStep);
   }
-
-  OrbitalSim *simulacion = (OrbitalSim *)malloc(sizeof(OrbitalSim));
-  simulacion->cantcuerpos = CANT_CUERPOS;
-  simulacion->timestep = timeStep;
-  simulacion->tiempotranscurrido = 0.0f;
-  simulacion->cuerpos = cuerpo;
-
-  return simulacion;
+  
+  this->cantcuerpos = CANT_CUERPOS;
+  this->timestep = timeStep;
+  this->tiempotranscurrido = 0.0f;
+  cuerpos = cuerpo;
 }
 
-void updateOrbitalSim(OrbitalSim *sim)
+bool OrbitalSim::actualizarSimulacion()
 {
-  for (int i = 0; i < sim->cantcuerpos; i++)
+  for (int i = 0; i<cantcuerpos ; i++)
   {
-    for (int j = i+1; j < sim->cantcuerpos; j++)
+    for (int j = i+1; j < cantcuerpos; j++)
     {
-      Vector3 diff = Vector3Subtract(sim->cuerpos[i].posicion, sim->cuerpos[j].posicion);
+      Vector3 diff = Vector3Subtract(cuerpos[i].getPosicion(), cuerpos[j].getPosicion());
       float longitud = Vector3Length(diff);
       longitud = longitud * longitud * longitud;
-      diff = Vector3Scale(diff, sim->timestep * sim->timestep * GRAVITATIONAL_CONSTANT);
+      diff = Vector3Scale(diff, timestep * timestep * GRAVITATIONAL_CONSTANT);
       if(i >= 9 && j >= 9)
       {
-        Vector3 termino = Vector3Scale(diff, sim->cuerpos[j].masa/longitud);
-        sim->cuerpos[i].acumulador_aceleracion = Vector3Subtract(sim->cuerpos[i].acumulador_aceleracion, termino);
-        sim->cuerpos[j].acumulador_aceleracion = Vector3Add(sim->cuerpos[j].acumulador_aceleracion, termino);
+        Vector3 termino = Vector3Scale(diff,  cuerpos[j].getMasa()/longitud);
+        cuerpos[i].decrementarAcumuladorAceleracion(termino);
+        cuerpos[j].incrementarAcumuladorAceleracion(termino);
       }
-      sim->cuerpos[i].acumulador_aceleracion = Vector3Subtract(sim->cuerpos[i].acumulador_aceleracion, Vector3Scale(diff, sim->cuerpos[j].masa/longitud));
-      sim->cuerpos[j].acumulador_aceleracion = Vector3Add(sim->cuerpos[j].acumulador_aceleracion, Vector3Scale(diff, sim->cuerpos[i].masa/longitud));
+      cuerpos[i].decrementarAcumuladorAceleracion(Vector3Scale(diff, (cuerpos[j].getMasa())/longitud));
+      cuerpos[j].incrementarAcumuladorAceleracion(Vector3Scale(diff, cuerpos[i].getMasa()/longitud));
     }
-    sim->cuerpos[i].posicion = Vector3Add(sim->cuerpos[i].posicion, sim->cuerpos[i].cte_velocidad);
-    sim->cuerpos[i].posicion = Vector3Add(sim->cuerpos[i].posicion, sim->cuerpos[i].acumulador_aceleracion);
+    cuerpos[i].incrementarPosicion(cuerpos[i].getConstanteVelocidad());
+    cuerpos[i].incrementarPosicion(cuerpos[i].getAcumuladorAceleracion());
+    
   }
-  sim->tiempotranscurrido += sim->timestep;
+  tiempotranscurrido += timestep;
+  return true;
 }
 
-void freeOrbitalSim(OrbitalSim *sim)
+void OrbitalSim::renderizarSimulacion3D()
 {
-  free(sim->cuerpos);
-  free(sim);
+  for (int i = 0; i < cantcuerpos; i++)
+  {
+    DrawSphereWires(Vector3Scale(cuerpos[i].getPosicion(), 1.0e-11f), 0.005f*logf(cuerpos[i].getRadio()), 2, 2, cuerpos[i].getColor());
+    DrawPoint3D(cuerpos[i].getPosicion(), cuerpos[i].getColor());
+  }
 }
+
+void OrbitalSim::renderizarSimulacion2D()
+{
+  DrawFPS(0,0);
+  DrawText(getISODate(tiempotranscurrido), 0, 25, 25, GetColor(0xFFFFF));
+}
+
+OrbitalSim::~OrbitalSim()
+{
+  delete[] cuerpos;
+}
+
+/*******************************************************************************
+ *******************************************************************************
+                        LOCAL FUNCTION DEFINITIONS
+ *******************************************************************************
+ ******************************************************************************/
+
+const char * OrbitalSim::getISODate(float currentTime)
+{
+  struct tm epoch_tm = {0, 0, 0, 1, 0, 122};
+  time_t epoch = mktime(&epoch_tm);
+  time_t local_time = epoch + (time_t)currentTime;
+  struct tm *local_tm = localtime(&local_time);
+  return TextFormat("Date: %04d-%02d-%02d", 1900 + local_tm->tm_year, local_tm->tm_mon + 1, local_tm->tm_mday);
+}
+
+#endif

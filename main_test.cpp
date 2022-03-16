@@ -34,9 +34,9 @@ int main()
   float timeMultiplier = 100 * SECONDS_PER_DAY; // Simulation speed: 100 days per real second
   float timeStep = timeMultiplier / fps;
 
-  OrbitalSim *sim = makeOrbitalSim(timeStep);
+  OrbitalSim sim = OrbitalSim(timeStep);
 
-  updateOrbitalSim(sim);
+  sim.actualizarSimulacion();
 
   return 0;
 }

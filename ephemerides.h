@@ -1,6 +1,6 @@
 /**
  * @file 	ephemerides.h
- * @authors	Tomás Castro, Lucía Ibañez
+ * @authors	??????
  *
  * @brief 	Archivo de efemérides
  * 

@@ -2,68 +2,41 @@
  * @file 	OrbitalSim.h
  * @authors	Tomás Castro, Lucía Ibañez
  *
- * @brief 	Definiciones relacionadas a datos de la simulación y los cuerpos
+ * @brief  Clase para controlar la simulación (encabezado)
  * 
  * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
  *
  */
 
-#ifndef ORBITALSIM_H
-#define ORBITALSIM_H
+#ifndef ORBITAL_SIM_H
+#define ORBITAL_SIM_H
 
 /*******************************************************************************
  * INCLUDE HEADER FILES
  ******************************************************************************/
 
-#include "raylib.h"
-#include "raymath.h"
+#include "OrbitalBody.h"
 
 /*******************************************************************************
- * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
+ * CLASSES
  ******************************************************************************/
-
-struct OrbitalBody
+  
+class OrbitalSim
 {
-  // const char* name; // Name
-  float masa;       // [kg]
-  float radio;     // [m]
-  Color color;      // raylib color
-  Vector3 posicion; // [m]
-  Vector3 cte_velocidad; // velocidad inicial * timestep
-  Vector3 acumulador_aceleracion;
+  public:
+    OrbitalSim(float timeStep);
+    ~OrbitalSim();
+    bool actualizarSimulacion();
+    void renderizarSimulacion3D();
+    void renderizarSimulacion2D();
+
+  private:
+    float timestep;
+    float tiempotranscurrido;
+    int cantcuerpos;
+    OrbitalBody *cuerpos;
+    float getRandomFloat(float min, float max);
+    const char *getISODate(float currentTime);
 };
-
-struct OrbitalSim
-{
-  float timestep;
-  float tiempotranscurrido;
-  int cantcuerpos;
-  OrbitalBody *cuerpos;
-};
-
-/*******************************************************************************
- * FUNCTION PROTOTYPES WITH GLOBAL SCOPE
- ******************************************************************************/
-
-/**
- * @brief Inicializa la simulación
- *
- * @param timeStep
- */
-OrbitalSim *makeOrbitalSim(float timeStep);
-
-/**
- * @brief Actualiza la simulación
- *
- * @param sim
- */
-void updateOrbitalSim(OrbitalSim *sim);
-
-/**
- * @brief Actualiza la simulación
- *
- * @param sim
- */
-void freeOrbitalSim(OrbitalSim *sim);
 
 #endif

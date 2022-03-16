@@ -24,8 +24,7 @@
  * INCLUDE HEADER FILES
  ******************************************************************************/
 
-#include "orbitalSim.h"
-#include "orbitalSimView.h"
+#include "OrbitalSim.h"
 #include <iostream>
 
 /*******************************************************************************
@@ -62,13 +61,12 @@ int main()
   float timeMultiplier = 10*SECONDS_PER_DAY;
   float timeStep = timeMultiplier / fps;
 
-  OrbitalSim *sim = makeOrbitalSim(timeStep);
+  OrbitalSim sim = OrbitalSim(timeStep);
 
   // Game loop
   while (!WindowShouldClose())
   {
-    updateOrbitalSim(sim);
-    cout << GetTime() << endl;
+    sim.actualizarSimulacion();
 
     UpdateCamera(&camera);
 
@@ -76,18 +74,15 @@ int main()
     ClearBackground(BLACK);
 
     BeginMode3D(camera);
-    renderOrbitalSim3D(sim);
+    sim.renderizarSimulacion3D();
     DrawGrid(10, 10.0f);
     EndMode3D();
 
-    renderOrbitalSim2D(sim);
+    sim.renderizarSimulacion2D();
     EndDrawing();
-    cout << GetTime() << endl << endl;
   }
 
   CloseWindow();
-
-  freeOrbitalSim(sim);
 
   return 0;
 }
