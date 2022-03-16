@@ -31,9 +31,11 @@ class OrbitalSim
     void renderizarSimulacion2D();
 
   private:
-    float timestep;
-    float tiempotranscurrido;
-    int cantcuerpos;
+    float timeStep;
+    float tiempoTranscurrido;
+    int cantPlanetas;
+    int cantAsteroides;
+    int cantCuerpos;
     OrbitalBody *cuerpos;
     float getRandomFloat(float min, float max);
     const char *getISODate(float currentTime);

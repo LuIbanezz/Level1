@@ -28,9 +28,8 @@
  ******************************************************************************/
 
 #define GRAVITATIONAL_CONSTANT 6.6743E-11F
-#define CANT_CUERPOS 509
 #define CANT_PLANETAS 9
-#define CANT_ASTERIODES 500
+#define CANT_ASTEROIDES 500
 
 /*******************************************************************************
  *******************************************************************************
@@ -39,56 +38,53 @@
  ******************************************************************************/
 
 OrbitalSim::OrbitalSim(float timeStep)
-{
-  OrbitalBody *cuerpo = new OrbitalBody[CANT_CUERPOS];
+{ 
+  cantPlanetas = CANT_PLANETAS;
+  cantAsteroides = CANT_ASTEROIDES;
+  cantCuerpos = CANT_PLANETAS + CANT_ASTEROIDES;
+  this->timeStep = timeStep;
+  tiempoTranscurrido = 0.0f;
+
+  OrbitalBody *cuerpo = new OrbitalBody[cantCuerpos];
   for (int i = 0; i < CANT_PLANETAS ; i++)
   {
     cuerpo[i] = OrbitalBody(solarSystem[i].mass, solarSystem[i].radius, solarSystem[i].color, solarSystem[i].position, solarSystem[i].velocity, timeStep);
   }
-  float masa_sol = solarSystem[0].mass;
-  for(int i = CANT_PLANETAS; i < CANT_CUERPOS ; i++)
+  float masaSol = solarSystem[0].mass;
+  for(int i = 0 ; i < cantCuerpos ; i++)
   {
-    cuerpo[i] = OrbitalBody(masa_sol, timeStep);
+    cuerpo[i] = OrbitalBody(masaSol, timeStep);
   }
-  
-  this->cantcuerpos = CANT_CUERPOS;
-  this->timestep = timeStep;
-  this->tiempotranscurrido = 0.0f;
+
   cuerpos = cuerpo;
 }
 
 bool OrbitalSim::actualizarSimulacion()
 {
-  for (int i = 0; i<cantcuerpos ; i++)
+  for (int i = 0 ; i < cantCuerpos ; i++)
   {
-    for (int j = i+1; j < cantcuerpos; j++)
+    for (int j = 0 ; j < cantPlanetas ; j++)
     {
+      if(i == j)
+        continue;
       Vector3 diff = Vector3Subtract(cuerpos[i].getPosicion(), cuerpos[j].getPosicion());
       float longitud = Vector3Length(diff);
       longitud = longitud * longitud * longitud;
-      diff = Vector3Scale(diff, timestep * timestep * GRAVITATIONAL_CONSTANT);
-      if(i >= 9 && j >= 9)
-      {
-        Vector3 termino = Vector3Scale(diff,  cuerpos[j].getMasa()/longitud);
-        cuerpos[i].decrementarAcumuladorAceleracion(termino);
-        cuerpos[j].incrementarAcumuladorAceleracion(termino);
-      }
-      cuerpos[i].decrementarAcumuladorAceleracion(Vector3Scale(diff, (cuerpos[j].getMasa())/longitud));
-      cuerpos[j].incrementarAcumuladorAceleracion(Vector3Scale(diff, cuerpos[i].getMasa()/longitud));
+      diff = Vector3Scale(diff, GRAVITATIONAL_CONSTANT);
+      cuerpos[i].decrementarAcumuladorAceleracion(Vector3Scale(diff, cuerpos[j].getMasa()/longitud));
     }
     cuerpos[i].incrementarPosicion(cuerpos[i].getConstanteVelocidad());
-    cuerpos[i].incrementarPosicion(cuerpos[i].getAcumuladorAceleracion());
-    
+    cuerpos[i].incrementarPosicion(Vector3Scale(cuerpos[i].getAcumuladorAceleracion(), timeStep * timeStep));
   }
-  tiempotranscurrido += timestep;
+  tiempoTranscurrido += timeStep;
   return true;
 }
 
 void OrbitalSim::renderizarSimulacion3D()
 {
-  for (int i = 0; i < cantcuerpos; i++)
+  for (int i = 0; i < cantCuerpos; i++)
   {
-    DrawSphereWires(Vector3Scale(cuerpos[i].getPosicion(), 1.0e-11f), 0.005f*logf(cuerpos[i].getRadio()), 2, 2, cuerpos[i].getColor());
+    DrawSphereWires(Vector3Scale(cuerpos[i].getPosicion(), 1.0e-11f), 0.005f*logf(cuerpos[i].getRadio()), 5, 5, cuerpos[i].getColor());
     DrawPoint3D(cuerpos[i].getPosicion(), cuerpos[i].getColor());
   }
 }
@@ -96,7 +92,7 @@ void OrbitalSim::renderizarSimulacion3D()
 void OrbitalSim::renderizarSimulacion2D()
 {
   DrawFPS(0,0);
-  DrawText(getISODate(tiempotranscurrido), 0, 25, 25, GetColor(0xFFFFF));
+  DrawText(getISODate(tiempoTranscurrido), 0, 25, 25, GetColor(0xFFFFF));
 }
 
 OrbitalSim::~OrbitalSim()

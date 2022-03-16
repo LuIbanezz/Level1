@@ -43,8 +43,8 @@ OrbitalBody::OrbitalBody(float masa, float radio, Color color, Vector3 posicion,
   this->radio = radio;
   this->color = color;
   this->posicion = posicion;
-  this->cte_velocidad = Vector3Scale(velocidad, timeStep);
-  this->acumulador_aceleracion = Vector3Zero();
+  this->cteVelocidad = Vector3Scale(velocidad, timeStep);
+  this->acumuladorAceleracion = Vector3Zero();
 }
 
 OrbitalBody::OrbitalBody(float centermass, float timeStep)
@@ -68,8 +68,8 @@ OrbitalBody::OrbitalBody(float centermass, float timeStep)
   this->radio = 2E3F;
   this->color = GRAY;
   this->posicion = {r * cosf(phi), 0, r * sinf(phi)};
-  this->cte_velocidad = Vector3Scale({-v * sinf(phi), vy, v * cosf(phi)}, timeStep);
-  this->acumulador_aceleracion = Vector3Zero();
+  this->cteVelocidad = Vector3Scale({-v * sinf(phi), vy, v * cosf(phi)}, timeStep);
+  this->acumuladorAceleracion = Vector3Zero();
 }
 
 void OrbitalBody::incrementarPosicion(Vector3 incremento)
@@ -99,22 +99,22 @@ Vector3 OrbitalBody::getPosicion()
 
 Vector3 OrbitalBody::getConstanteVelocidad()
 {
-  return cte_velocidad;
+  return cteVelocidad;
 }
 
 Vector3 OrbitalBody::getAcumuladorAceleracion()
 {
-  return acumulador_aceleracion;
+  return acumuladorAceleracion;
 }
 
 void OrbitalBody::incrementarAcumuladorAceleracion(Vector3 incremento)
 {
-  acumulador_aceleracion = Vector3Add(acumulador_aceleracion, incremento);
+  acumuladorAceleracion = Vector3Add(acumuladorAceleracion, incremento);
 }
 
 void OrbitalBody::decrementarAcumuladorAceleracion(Vector3 incremento)
 {
-  acumulador_aceleracion = Vector3Subtract(acumulador_aceleracion, incremento);
+  acumuladorAceleracion = Vector3Subtract(acumuladorAceleracion, incremento);
 }
 
 /*******************************************************************************

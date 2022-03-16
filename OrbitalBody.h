@@ -43,8 +43,8 @@ class OrbitalBody
     float radio;     // [m]
     Color color;      // raylib color
     Vector3 posicion; // [m]
-    Vector3 cte_velocidad; // velocidad inicial * timestep
-    Vector3 acumulador_aceleracion;
+    Vector3 cteVelocidad; // velocidad inicial * timestep
+    Vector3 acumuladorAceleracion;
     float getRandomFloat(float min, float max);
 };
 

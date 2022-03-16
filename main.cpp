@@ -10,14 +10,26 @@
 
 
 /*
- * El uso de float está justificado pues la precisión para representar las magnitudes es óptima
+ * El uso de float está justificado pues:
+ * La precisión para representar las magnitudes es óptima y
  * Los errores cometidos en los cálculos no son significativos
+ * Utilizar un sistema de punto fijo requieriría demasiada memoria puesto que las magnitudes alcanzan valores muy grandes
+ * Si se ejecutan las operaciones en el orden correcto, no se cometarán desbordes
  */
 
 /*
- * La complejidad es O(n^2)...
+ * Para optimizar el código se han hecho dos cosas:
  * 
+ * 1. Despreciar la fuerza que ejercen los asteroides sobre los demás cuerpos:
+ *  Puesto que la masa de los asteroides es pequeña, en cada cuerpo sólo se sumarán
+ *  las fuerzas ejercidas por los planetas. Siendo n la cantidad total de cuerpos,
+ *  la complejidad del algoritmo que actualiza la posición previa a esta modificación
+ *  era O(n^2) por tener dos bucles anidados, mientras que ahora la complejidad es
+ *  O(n), puesto que el bucle anidado sólo hace 9 iteraciones, que es lo mismo que la
+ *  cantidad de planetas.
  * 
+ * 2. Cambiar la función que dibuja las esferas
+ *  
  */
 
 /*******************************************************************************
