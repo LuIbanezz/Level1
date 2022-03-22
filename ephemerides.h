@@ -1,8 +1,8 @@
 /**
- * @file 	ephemerides.h
- * @authors	Tomás Castro, Lucía Ibañez
+ * @file ephemerides.h
+ * @authors	Marc S. Ressl
  *
- * @brief 	Archivo de efemérides
+ * @brief Archivo de efemérides
  * 
  * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
  *
@@ -102,8 +102,6 @@ EphemeridesBody solarSystem[] = {
     },
 };
 
-#define SOLARSYSTEM_BODYNUM (sizeof(solarSystem) / sizeof(EphemeridesBody))
-
 // Alpha Centauri system
 EphemeridesBody alphaCentauriSystem[] = {
     {
@@ -127,6 +125,8 @@ EphemeridesBody alphaCentauriSystem[] = {
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
+
+#define SOLARSYSTEM_BODYNUM (sizeof(solarSystem) / sizeof(EphemeridesBody))
 #define ALPHACENTAURISYSTEM_BODYNUM (sizeof(alphaCentauriSystem) / sizeof(EphemeridesBody))
 
 #endif

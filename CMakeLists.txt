@@ -24,7 +24,7 @@ target_link_libraries(orbitalsim PRIVATE ${RAYLIB_LIBRARIES})
 # Main test
 enable_testing()
 
-add_executable(orbitalsim_test main_test.cpp orbitalSim.cpp)
+add_executable(orbitalsim_test orbitalSim.cpp)
 
 add_test(NAME test1 COMMAND orbitalsim_test)
 

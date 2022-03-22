@@ -29,15 +29,18 @@ struct OrbitalBody
   float radio;     // [m]
   Color color;      // raylib color
   Vector3 posicion; // [m]
-  Vector3 cte_velocidad; // velocidad inicial * timestep
+  Vector3 cte_velocidad; // velocidad inicial * timeStep
   Vector3 acumulador_aceleracion;
 };
 
 struct OrbitalSim
 {
-  float timestep;
-  float tiempotranscurrido;
-  int cantcuerpos;
+  float timeStep;
+  float tiempoTranscurrido;
+  int cantCuerpos;
+  int cantEstrellas;
+  int cantPlanetas;
+  int cantAsteroides;
   OrbitalBody *cuerpos;
 };
 
@@ -50,20 +53,20 @@ struct OrbitalSim
  *
  * @param timeStep
  */
-OrbitalSim *makeOrbitalSim(float timeStep);
+OrbitalSim *iniciarSimulacion(float timeStep);
 
 /**
  * @brief Actualiza la simulación
  *
  * @param sim
  */
-void updateOrbitalSim(OrbitalSim *sim);
+void actualizarSimulacion(OrbitalSim *sim);
 
 /**
  * @brief Actualiza la simulación
  *
  * @param sim
  */
-void freeOrbitalSim(OrbitalSim *sim);
+void liberarSimulacion(OrbitalSim *sim);
 
 #endif

@@ -1,8 +1,8 @@
 /**
- * @file 	OrbitalSimView.h
+ * @file OrbitalSimView.h
  * @authors	Tomás Castro, Lucía Ibañez
  *
- * @brief 	Definiciones relacionadas a datos de la simulación y los cuerpos
+ * @brief Definiciones relacionadas a datos de la simulación y los cuerpos
  * 
  * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
  *
@@ -26,13 +26,13 @@
  *
  * @param timeStep
  */
-void renderOrbitalSim3D(OrbitalSim *sim);
+void renderizarSimulacion3D(OrbitalSim *sim);
 
 /**
  * @brief Renderiza la simulación (objetos 2D)
  *
  * @param timeStep
  */
-void renderOrbitalSim2D(OrbitalSim *sim);
+void renderizarSimulacion2D(OrbitalSim *sim);
 
 #endif
