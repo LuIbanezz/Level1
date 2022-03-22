@@ -1,8 +1,8 @@
 ﻿/**
- * @file 	OrbitalSim.h
+ * @file OrbitalSim.h
  * @authors	Tomás Castro, Lucía Ibañez
  *
- * @brief  Clase para controlar la simulación (encabezado)
+ * @brief Clase para el control de la simulación (encabezado)
  * 
  * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
  *
@@ -34,6 +34,7 @@ class OrbitalSim
     float timeStep;
     float tiempoTranscurrido;
     int cantPlanetas;
+    int cantEstrellas;
     int cantAsteroides;
     int cantCuerpos;
     OrbitalBody *cuerpos;

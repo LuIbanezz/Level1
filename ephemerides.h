@@ -1,9 +1,9 @@
 /**
  * @file 	ephemerides.h
- * @authors	??????
+ * @authors	Marc S. Ressl
  *
  * @brief 	Archivo de efemérides
- * 
+ *
  * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
  *
  */

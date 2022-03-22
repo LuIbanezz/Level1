@@ -1,8 +1,8 @@
 /**
- * @file 	OrbitalBody.cpp
+ * @file OrbitalBody.cpp
  * @authors	Tomás Castro, Lucía Ibañez
  *
- * @brief Clase para un cuerpo (cuerpo)
+ * @brief Clase para el manejo de información de un cuerpo celeste (cuerpo)
  * 
  * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
  *
@@ -37,7 +37,8 @@ OrbitalBody::OrbitalBody()
 
 }
 
-OrbitalBody::OrbitalBody(float masa, float radio, Color color, Vector3 posicion, Vector3 velocidad, float timeStep)
+OrbitalBody::OrbitalBody(float masa, float radio, Color color, Vector3 posicion, Vector3 velocidad,
+                         float timeStep)
 {
   this->masa = masa;
   this->radio = radio;
@@ -57,8 +58,8 @@ OrbitalBody::OrbitalBody(float centermass, float timeStep)
   float r = ASTEROIDS_MEAN_RADIO * sqrtf(fabs(l));
   float phi = getRandomFloat(0, 2 * M_PI);
 
-  // Surprise!
-  phi = 0;
+  // Este es el Easter Egg: Los asteriodes aparecerán alineados
+  //phi = 0;
 
   // https://en.wikipedia.org/wiki/Circular_orbit#Velocity
   float v = sqrtf(GRAVITATIONAL_CONSTANT * centermass / r) * getRandomFloat(0.6F, 1.2F);

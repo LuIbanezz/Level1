@@ -1,8 +1,8 @@
 /**
- * @file 	OrbitalBody.h
+ * @file OrbitalBody.h
  * @authors	Tomás Castro, Lucía Ibañez
  *
- * @brief Clase para un cuerpo (encabezado)
+ * @brief Clase para un cuerpo celeste (encabezado)
  * 
  * @copyright Copyright (c) 2022 ~ EDA ~ ITBA
  *
@@ -27,7 +27,8 @@ class OrbitalBody
   public:
     OrbitalBody();
     OrbitalBody(float centermass, float timeStep); //constructor para el asteroide
-    OrbitalBody(float masa, float radio, Color color, Vector3 posicion, Vector3 velocidad, float timeStep);
+    OrbitalBody(float masa, float radio, Color color, Vector3 posicion, Vector3 velocidad, 
+                float timeStep);
     void incrementarPosicion(Vector3 incremento);
     float getMasa();
     float getRadio();
