@@ -46,15 +46,11 @@ OrbitalSim::OrbitalSim(float timeStep)
   tiempoTranscurrido = 0.0f;
 
   OrbitalBody *cuerpo = new OrbitalBody[cantCuerpos];
-  for (int i = 0; i < CANT_PLANETAS ; i++)
-  {
+  for (int i = 0; i < cantPlanetas ; i++)
     cuerpo[i] = OrbitalBody(solarSystem[i].mass, solarSystem[i].radius, solarSystem[i].color, solarSystem[i].position, solarSystem[i].velocity, timeStep);
-  }
   float masaSol = solarSystem[0].mass;
-  for(int i = 0 ; i < cantCuerpos ; i++)
-  {
+  for(int i = cantPlanetas ; i < cantCuerpos ; i++)
     cuerpo[i] = OrbitalBody(masaSol, timeStep);
-  }
 
   cuerpos = cuerpo;
 }
@@ -84,7 +80,7 @@ void OrbitalSim::renderizarSimulacion3D()
 {
   for (int i = 0; i < cantCuerpos; i++)
   {
-    DrawSphereWires(Vector3Scale(cuerpos[i].getPosicion(), 1.0e-11f), 0.005f*logf(cuerpos[i].getRadio()), 5, 5, cuerpos[i].getColor());
+    DrawSphereWires(Vector3Scale(cuerpos[i].getPosicion(), 1.0e-11f), 0.005f*logf(cuerpos[i].getRadio()), 3, 5, cuerpos[i].getColor());
     DrawPoint3D(cuerpos[i].getPosicion(), cuerpos[i].getColor());
   }
 }

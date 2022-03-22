@@ -1,5 +1,5 @@
 /**
- * @file 	OrbitalSim.h
+ * @file 	OrbitalBody.h
  * @authors	Tomás Castro, Lucía Ibañez
  *
  * @brief Clase para un cuerpo (encabezado)
@@ -36,7 +36,7 @@ class OrbitalBody
     Vector3 getConstanteVelocidad();
     Vector3 getAcumuladorAceleracion();
     void incrementarAcumuladorAceleracion(Vector3 incremento);
-    void decrementarAcumuladorAceleracion(Vector3 incremento);
+    void decrementarAcumuladorAceleracion(Vector3 decremento);
 
   private:
     float masa;       // [kg]

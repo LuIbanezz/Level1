@@ -1,5 +1,5 @@
 /**
- * @file 	OrbitalSim.cpp
+ * @file 	OrbitalBody.cpp
  * @authors	Tomás Castro, Lucía Ibañez
  *
  * @brief Clase para un cuerpo (cuerpo)
@@ -58,7 +58,7 @@ OrbitalBody::OrbitalBody(float centermass, float timeStep)
   float phi = getRandomFloat(0, 2 * M_PI);
 
   // Surprise!
-  // phi = 0;
+  phi = 0;
 
   // https://en.wikipedia.org/wiki/Circular_orbit#Velocity
   float v = sqrtf(GRAVITATIONAL_CONSTANT * centermass / r) * getRandomFloat(0.6F, 1.2F);
@@ -112,9 +112,9 @@ void OrbitalBody::incrementarAcumuladorAceleracion(Vector3 incremento)
   acumuladorAceleracion = Vector3Add(acumuladorAceleracion, incremento);
 }
 
-void OrbitalBody::decrementarAcumuladorAceleracion(Vector3 incremento)
+void OrbitalBody::decrementarAcumuladorAceleracion(Vector3 decremento)
 {
-  acumuladorAceleracion = Vector3Subtract(acumuladorAceleracion, incremento);
+  acumuladorAceleracion = Vector3Subtract(acumuladorAceleracion, decremento);
 }
 
 /*******************************************************************************
